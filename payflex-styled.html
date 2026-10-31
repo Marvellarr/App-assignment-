@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayFlex — Simple Banking for Nigeria</title>
+
+  <style>
+    /* A small set of colours used throughout the page */
+    :root {
+      --navy: #102321;
+      --green: #b9f36b;
+      --muted: #66736f;
+      --light: #f5f8f3;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--navy);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      padding: 13px 20px;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .container {
+      margin: 0 auto;
+      max-width: 1120px;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    nav {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      max-width: 1168px;
+      min-height: 82px;
+      padding: 0 24px;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo i {
+      color: #5a9a2e;
+      font-style: normal;
+    }
+
+    .menu {
+      align-items: center;
+      display: flex;
+      gap: 34px;
+      list-style: none;
+    }
+
+    .menu a {
+      color: #485651;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .menu a:hover,
+    .footer-links a:hover {
+      color: #5a9a2e;
+    }
+
+    .btn-dark {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .hamburger,
+    #menu-toggle {
+      display: none;
+    }
+
+    /* Hero area */
+    .hero {
+      align-items: center;
+      background: var(--light);
+      border-radius: 18px;
+      display: grid;
+      gap: 45px;
+      grid-template-columns: 1.05fr 0.95fr;
+      margin: 12px auto 0;
+      max-width: 1168px;
+      min-height: 440px;
+      overflow: hidden;
+      padding: 58px 72px;
+    }
+
+    .eyebrow {
+      color: #54832f;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.7px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(40px, 5vw, 59px);
+      letter-spacing: -2.8px;
+      line-height: 1.08;
+      max-width: 540px;
+    }
+
+    .hero-copy > p {
+      color: var(--muted);
+      font-size: 16px;
+      margin: 20px 0 26px;
+      max-width: 460px;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--navy);
+    }
+
+    .hero-note {
+      color: #77817d;
+      font-size: 12px;
+      margin-top: 14px;
+    }
+
+    /* A simple phone illustration made from HTML and CSS, so no image file is needed */
+    .phone-area {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      min-height: 320px;
+      position: relative;
+    }
+
+    .circle-bg {
+      background: #dff2c9;
+      border-radius: 50%;
+      height: 290px;
+      position: absolute;
+      width: 290px;
+    }
+
+    .phone {
+      background: var(--white);
+      border: 8px solid #18312c;
+      border-radius: 30px;
+      box-shadow: 0 22px 55px rgba(16, 35, 33, 0.2);
+      min-height: 340px;
+      padding: 25px 18px 20px;
+      position: relative;
+      transform: rotate(3deg);
+      width: 220px;
+      z-index: 1;
+    }
+
+    .phone-top {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .phone-brand {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .phone-avatar {
+      align-items: center;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      font-size: 10px;
+      font-weight: 800;
+      height: 30px;
+      justify-content: center;
+      width: 30px;
+    }
+
+    .balance-label {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .balance {
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin: 3px 0 17px;
+    }
+
+    .phone-action-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .phone-action {
+      background: var(--light);
+      border-radius: 8px;
+      flex: 1;
+      font-size: 9px;
+      padding: 9px 4px;
+      text-align: center;
+    }
+
+    .phone-action strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .activity-title {
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .activity {
+      align-items: center;
+      border-top: 1px solid #edf0eb;
+      display: flex;
+      font-size: 9px;
+      justify-content: space-between;
+      padding: 9px 0;
+    }
+
+    .activity span:last-child {
+      font-weight: 700;
+    }
+
+    .floating-tag {
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 8px 25px rgba(16, 35, 33, 0.12);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 12px 15px;
+      position: absolute;
+      right: -2px;
+      top: 55px;
+      z-index: 2;
+    }
+
+    /* Reusable section headings and feature cards */
+    .section {
+      padding: 86px 0;
+    }
+
+    .section-heading {
+      margin: 0 auto 36px;
+      max-width: 620px;
+      text-align: center;
+    }
+
+    .section-heading h2,
+    .cta h2 {
+      font-size: clamp(30px, 4vw, 40px);
+      letter-spacing: -1.6px;
+      line-height: 1.2;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .card {
+      background: var(--light);
+      border: 1px solid #edf1e9;
+      border-radius: 13px;
+      min-height: 215px;
+      padding: 24px 20px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 28px rgba(16, 35, 33, 0.08);
+      transform: translateY(-4px);
+    }
+
+    .ic {
+      align-items: center;
+      background: #e4f5d5;
+      border-radius: 10px;
+      display: flex;
+      font-size: 22px;
+      height: 48px;
+      justify-content: center;
+      margin-bottom: 17px;
+      width: 48px;
+    }
+
+    .card h3 {
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Pricing cards */
+    .pricing-section {
+      background: #f9faf7;
+    }
+
+    .pricing {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pcard {
+      background: var(--white);
+      border: 1px solid #e5eae2;
+      border-radius: 14px;
+      padding: 28px;
+    }
+
+    .pcard.dark {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--white);
+      box-shadow: 0 16px 35px rgba(16, 35, 33, 0.16);
+      transform: translateY(-8px);
+    }
+
+    .pcard h4 {
+      color: #66805c;
+      font-size: 11px;
+      letter-spacing: 1.2px;
+    }
+
+    .pcard.dark h4 {
+      color: var(--green);
+    }
+
+    .pcard h3 {
+      font-size: 28px;
+      letter-spacing: -1px;
+      margin: 12px 0 18px;
+    }
+
+    .pcard ul {
+      list-style: none;
+      margin-bottom: 23px;
+    }
+
+    .pcard li {
+      border-top: 1px solid #edf0eb;
+      font-size: 13px;
+      padding: 10px 0;
+    }
+
+    .pcard.dark li {
+      border-color: rgba(255, 255, 255, 0.12);
+      color: #e1e9e3;
+    }
+
+    .pcard button {
+      background: #edf5e7;
+      color: var(--navy);
+      width: 100%;
+    }
+
+    .pcard.dark button {
+      background: var(--green);
+    }
+
+    /* Bottom call to action */
+    .cta {
+      background: var(--green);
+      border-radius: 16px;
+      margin: 10px auto 75px;
+      max-width: 1120px;
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .cta p {
+      color: #42513b;
+      margin: 10px auto 21px;
+    }
+
+    .cta button {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    /* Footer */
+    .footer {
+      background: #102321;
+      color: var(--white);
+      padding: 54px 24px 22px;
+    }
+
+    .footer-top,
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      max-width: 1120px;
+    }
+
+    .footer-top {
+      gap: 35px;
+      padding-bottom: 40px;
+    }
+
+    .footer-logo {
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+    .footer-brand p {
+      color: #aab7b0;
+      font-size: 13px;
+      margin-top: 8px;
+      max-width: 190px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-links h4 {
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .footer-links a {
+      color: #b3c0b8;
+      font-size: 12px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      color: #b3c0b8;
+      font-size: 11px;
+      gap: 12px;
+      padding-top: 18px;
+    }
+
+    /* Tablet and mobile layout */
+    @media (max-width: 850px) {
+      .hero {
+        gap: 10px;
+        padding: 45px 38px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-top {
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 650px) {
+      nav {
+        min-height: 70px;
+        position: relative;
+      }
+
+      .hamburger {
+        cursor: pointer;
+        display: block;
+        font-size: 25px;
+      }
+
+      .menu {
+        align-items: stretch;
+        background: var(--white);
+        border: 1px solid #edf1e9;
+        border-radius: 10px;
+        box-shadow: 0 12px 25px rgba(16, 35, 33, 0.1);
+        display: none;
+        flex-direction: column;
+        gap: 0;
+        left: 24px;
+        padding: 10px;
+        position: absolute;
+        right: 24px;
+        top: 62px;
+        z-index: 5;
+      }
+
+      .menu li a {
+        display: block;
+        padding: 10px;
+      }
+
+      .menu li:last-child {
+        padding: 8px;
+      }
+
+      .menu li button {
+        width: 100%;
+      }
+
+      #menu-toggle:checked ~ .menu {
+        display: flex;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        margin: 0 14px;
+        padding: 40px 24px 25px;
+      }
+
+      .hero-copy > p {
+        font-size: 15px;
+      }
+
+      .phone-area {
+        min-height: 340px;
+      }
+
+      .section {
+        padding: 65px 0;
+      }
+
+      .container {
+        padding: 0 18px;
+      }
+
+      .grid,
+      .pricing {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: auto;
+      }
+
+      .pcard.dark {
+        transform: none;
+      }
+
+      .cta {
+        border-radius: 0;
+        margin-bottom: 0;
+      }
+
+      .footer-top {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="logo" href="#home" aria-label="PayFlex home">Pay<i>Flex</i></a>
+    <input type="checkbox" id="menu-toggle" aria-label="Toggle navigation menu">
+    <label for="menu-toggle" class="hamburger" aria-hidden="true">☰</label>
+    <ul class="menu">
+      <li><a href="#features">Personal</a></li>
+      <li><a href="#pricing">Business</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><button class="btn-dark" type="button">Open Account</button></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow">A simpler way to bank</p>
+        <h1>Banking made simple for Nigeria.</h1>
+        <p>Open NGN, USD &amp; GBP accounts with your NIN. Send money, get paid — all in one app.</p>
+        <button class="btn-primary" type="button">Create Free Account →</button>
+        <p class="hero-note">Fast setup. Easy everyday banking.</p>
+      </div>
+
+      <div class="phone-area" aria-label="Preview of the PayFlex banking app">
+        <div class="circle-bg"></div>
+        <div class="phone">
+          <div class="phone-top">
+            <span class="phone-brand">PayFlex</span>
+            <span class="phone-avatar">AM</span>
+          </div>
+          <p class="balance-label">Total balance</p>
+          <p class="balance">₦245,800</p>
+          <div class="phone-action-row">
+            <div class="phone-action"><strong>↗</strong>Send</div>
+            <div class="phone-action"><strong>＋</strong>Add money</div>
+            <div class="phone-action"><strong>▣</strong>Cards</div>
+          </div>
+          <p class="activity-title">Recent activity</p>
+          <div class="activity"><span>Groceries</span><span>- ₦12,500</span></div>
+          <div class="activity"><span>Salary payment</span><span>+ ₦85,000</span></div>
+          <div class="activity"><span>Electricity</span><span>- ₦8,200</span></div>
+        </div>
+        <div class="floating-tag">✓ Transfer complete</div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Made for everyday life</p>
+          <h2>Everything you need.</h2>
+          <p>Simple tools to help you move, save and manage your money.</p>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <div class="ic">💳</div>
+            <h3>Multi-Currency</h3>
+            <p>NGN, USD &amp; GBP in 2 minutes. Get paid from abroad instantly.</p>
+          </article>
+          <article class="card">
+            <div class="ic">⚡</div>
+            <h3>Instant Transfers</h3>
+            <p>To any bank in under 5 seconds. No hidden fees.</p>
+          </article>
+          <article class="card">
+            <div class="ic">📈</div>
+            <h3>18% Savings</h3>
+            <p>Daily interest. Withdraw anytime you need it.</p>
+          </article>
+          <article class="card">
+            <div class="ic">🏦</div>
+            <h3>Business Loans</h3>
+            <p>Up to ₦10M, no collateral. 10-min approval.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section pricing-section" id="pricing">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Clear and simple</p>
+          <h2>Simple pricing.</h2>
+          <p>No hidden charges. Cancel anytime.</p>
+        </div>
+        <div class="pricing">
+          <article class="pcard">
+            <h4>PERSONAL</h4>
+            <h3>₦0/mo</h3>
+            <ul>
+              <li>Free NGN &amp; USD account</li>
+              <li>20 free transfers / month</li>
+              <li>Virtual card • ₦1,000</li>
+              <li>Savings up to 15%</li>
+            </ul>
+            <button type="button">Start Free</button>
+          </article>
+          <article class="pcard dark">
+            <h4>BUSINESS • POPULAR</h4>
+            <h3>₦200,000/mo</h3>
+            <ul>
+              <li>Everything in Personal</li>
+              <li>Unlimited free transfers</li>
+              <li>Loans up to ₦10M</li>
+              <li>POS, Invoicing &amp; API</li>
+            </ul>
+            <button type="button">Get Business</button>
+          </article>
+          <article class="pcard">
+            <h4>ENTERPRISE</h4>
+            <h3>Custom</h3>
+            <ul>
+              <li>Dedicated manager</li>
+              <li>Custom limits</li>
+              <li>Private infrastructure</li>
+              <li>CBN settlement</li>
+            </ul>
+            <button type="button">Talk to Sales</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2>Open your account in 2 minutes.</h2>
+      <p>Join 200,000+ Nigerians. All you need is your NIN and phone number.</p>
+      <button type="button">Download App →</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">PayFlex</div>
+        <p>Everyday banking, made a little easier.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Product</h4>
+        <a href="#features">Personal Account</a>
+        <a href="#pricing">Business Account</a>
+        <a href="#features">Savings</a>
+        <a href="#features">Loans</a>
+        <a href="#features">Cards</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+        <a href="#">Press</a>
+        <a href="#">Partners</a>
+      </div>
+      <div class="footer-links">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">CBN License</a>
+        <a href="#">NDIC Insurance</a>
+        <a href="#">Complaints</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div><b>PayFlex MFB</b> Licensed by Central Bank of Nigeria • Lagos, Nigeria</div>
+      <div>© 2026 PayFlex. All rights reserved.</div>
+    </div>
+  </footer>
+</body>
+</html>
